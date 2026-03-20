@@ -22,14 +22,16 @@ RUN mkdir -p /company_data/HR \
     /company_data/Engineering \
     /company_data/Finance
 
+# Allow traversal (IMPORTANT)
+RUN chmod 755 /company_data
+
 # -----------------------------
 # 4. CREATE GROUPS
 # -----------------------------
 RUN groupadd hr && \
     groupadd engineering && \
     groupadd finance
-#fix this
-RUN chmod 755 /company_data
+
 # -----------------------------
 # 5. CREATE USERS
 # -----------------------------
@@ -38,7 +40,7 @@ RUN useradd -m -g hr hr1 && \
     useradd -m -g finance fin1
 
 # -----------------------------
-# 6. SET PERMISSIONS
+# 6. SET PERMISSIONS (INITIAL)
 # -----------------------------
 RUN chown -R :hr /company_data/HR && \
     chown -R :engineering /company_data/Engineering && \
@@ -70,13 +72,16 @@ RUN touch /company_data/Engineering/project.txt && \
 # -----------------------------
 # 10. SECURITY AUDIT SCRIPT
 # -----------------------------
-RUN echo '#!/bin/bash\nls -l /company_data > /audit.log 2> /error.log\ngrep "^-r" /audit.log | awk "{print \$1, \$3}" > /report.txt' > /audit.sh && \
+RUN echo '#!/bin/bash\n\
+ls -l /company_data > /audit.log 2> /error.log\n\
+grep "^-r" /audit.log | awk "{print \$1, \$3}" > /report.txt' > /audit.sh && \
     chmod +x /audit.sh
 
 # -----------------------------
 # 11. BACKUP SCRIPT
 # -----------------------------
-RUN echo '#!/bin/bash\ntar -czf /backup.tar.gz /company_data' > /backup.sh && \
+RUN printf '#!/bin/bash\n\
+tar -czf /backup.tar.gz /company_data\n' > /backup.sh && \
     chmod +x /backup.sh
 
 # -----------------------------
@@ -97,8 +102,14 @@ RUN echo "Welcome to Company OS - Authorized Access Only" > /etc/motd
 # -----------------------------
 # 15. SELF-HEALING ENTRYPOINT
 # -----------------------------
-RUN echo '#!/bin/bash\nchmod -R 770 /company_data\necho "Permissions reset on startup"\nexec "$@"' > /entrypoint.sh && \
+RUN printf '#!/bin/bash\n\
+chmod 755 /company_data\n\
+chmod 770 /company_data/HR\n\
+chmod 770 /company_data/Engineering\n\
+chmod 770 /company_data/Finance\n\
+echo "Permissions reset on startup"\n\
+exec "$@"\n' > /entrypoint.sh && \
     chmod +x /entrypoint.sh
-
+    
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
