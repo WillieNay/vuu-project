@@ -70,8 +70,12 @@ RUN touch /company_data/Engineering/project.txt && \
 # -----------------------------
 # 10. SECURITY AUDIT SCRIPT
 # -----------------------------
-RUN echo '#!/bin/bash\nls -l /company_data > /audit.log 2> /error.log\ngrep "^-r" /audit.log | awk "{print \$1, \$3}" > /report.txt' > /audit.sh && \
-    chmod +x /audit.sh
+RUN printf '%s\n' \
+'#!/bin/bash' \
+'echo "=== Security Audit ===" > /report.txt' \
+'find /company_data -maxdepth 2 -exec ls -ld {} \; > /audit.log 2> /error.log' \
+'awk "{print \$1, \$3, \$4, \$9}" /audit.log >> /report.txt' \
+> /audit.sh && chmod +x /audit.sh
 
 # -----------------------------
 # 11. BACKUP SCRIPT
@@ -97,8 +101,19 @@ RUN echo "Welcome to Company OS - Authorized Access Only" > /etc/motd
 # -----------------------------
 # 15. SELF-HEALING ENTRYPOINT
 # -----------------------------
-RUN echo '#!/bin/bash\nchmod -R 770 /company_data\necho "Permissions reset on startup"\nexec "$@"' > /entrypoint.sh && \
-    chmod +x /entrypoint.sh
+RUN printf '%s\n' \
+'#!/bin/bash' \
+'chown root:hr /company_data/HR' \
+'chown root:engineering /company_data/Engineering' \
+'chown root:finance /company_data/Finance' \
+'chmod 770 /company_data/HR /company_data/Engineering /company_data/Finance' \
+'chmod g+s /company_data/HR /company_data/Engineering /company_data/Finance' \
+'chmod +t /company_data/HR' \
+'service cron start' \
+'/audit.sh' \
+'echo "Permissions reset on startup"' \
+'exec "$@"' \
+> /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
