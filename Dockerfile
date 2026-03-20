@@ -18,7 +18,9 @@ RUN apt-get update && \
 # -----------------------------
 # 3. CREATE COMPANY STRUCTURE
 # -----------------------------
-RUN mkdir -p /company_data/{HR,Engineering,Finance}
+RUN mkdir -p /company_data/HR \
+    /company_data/Engineering \
+    /company_data/Finance
 
 # -----------------------------
 # 4. CREATE GROUPS
