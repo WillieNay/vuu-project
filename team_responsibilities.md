@@ -6,7 +6,7 @@ The project presentation is divided among 6 members to ensure clear coverage of 
 
 ---
 
-# 👤 Member 1 — System Architecture & Docker (Lead)
+# 👤 Karlos — System Architecture & Docker (Lead)
 
 ## 🎯 Responsibilities
 
@@ -34,7 +34,7 @@ cat /etc/timezone
 
 ---
 
-# 👤 Member 2 — System Setup & Core Infrastructure
+# 👤 Erik — System Setup & Core Infrastructure
 
 ## 🎯 Responsibilities
 
@@ -59,7 +59,7 @@ cat /etc/timezone
 
 ---
 
-# 👤 Member 3 — Users & Groups (Identity Management)
+# 👤 Igris — Users & Groups (Identity Management)
 
 ## 🎯 Responsibilities
 
@@ -84,7 +84,7 @@ id eng1
 
 ---
 
-# 👤 Member 4 — Permissions & Security ⭐
+# 👤 Nick — Permissions & Security ⭐
 
 ## 🎯 Responsibilities
 
@@ -108,7 +108,7 @@ cd /company_data/Engineering   # should fail
 
 ---
 
-# 👤 Member 5 — Filesystem & Automation
+# 👤 William — Filesystem & Automation
 
 ## 🎯 Responsibilities
 
@@ -133,7 +133,7 @@ cat /report.txt
 
 ---
 
-# 👤 Member 6 — Innovation Features 🚀
+# 👤 Vii — Innovation Features 🚀
 
 ## 🎯 Responsibilities
 
