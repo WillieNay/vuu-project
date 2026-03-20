@@ -28,7 +28,7 @@ RUN mkdir -p /company_data/HR \
 RUN groupadd hr && \
     groupadd engineering && \
     groupadd finance
-
+RUN chmod 755 /company_data
 # -----------------------------
 # 5. CREATE USERS
 # -----------------------------
